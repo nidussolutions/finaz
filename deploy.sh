@@ -146,10 +146,6 @@ WEB_PORT="${FINAZ_WEB_PORT:-3000}"
 
 log "Configuring PM2 processes (recreate)"
 
-# Remove se existir (evita manter comando antigo)
-pm2 delete "$API_NAME" >/dev/null 2>&1 || true
-pm2 delete "$WEB_NAME" >/dev/null 2>&1 || true
-
 # defina PORT/NODE_ENV no comando pra garantir porta/ambiente
 pm2 start bash --name "$API_NAME" -- -lc "cd '$API_CWD' && PORT=$API_PORT NODE_ENV=production $BACK_START_CMD"
 pm2 start bash --name "$WEB_NAME" -- -lc "cd '$WEB_CWD' && PORT=$WEB_PORT NODE_ENV=production $FRONT_START_CMD"
