@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 
 import transactionsRouter from './routes/transactions.router';

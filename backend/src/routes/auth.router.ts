@@ -1,14 +1,10 @@
 // auth.router.ts: controla as rotas relacionadas à autenticação
-import { Router } from 'express';
+import { Router, Response } from 'express';
+import { login, signup } from '../controller/auth.controller';
 
 const router = Router();
 
-router.post('/login', (req, res) => {
-  res.send('Login endpoint');
-});
-
-router.post('/register', (req, res) => {
-  res.send('Register endpoint');
-});
+router.post('/login', login);
+router.post('/signup', signup);
 
 export default router;
