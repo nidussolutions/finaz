@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-### Mini Dashboard Financeiro Pessoal - Deploy Script
-# Environment:
-# - apps/api/.env       -> must include DATABASE_URL and JWT_SECRET
-# - apps/web/.env.production or .env.local -> NEXT_PUBLIC_* vars as needed
-#
-# Processes:
-# - PM2 app name "mini-api" (default port 4000)
-# - PM2 app name "mini-web" (default port 3002)
-
 BRANCH="main"
 DO_GIT_PULL=false
 
@@ -159,7 +150,7 @@ log "Configuring PM2 processes (recreate)"
 pm2 delete "$API_NAME" >/dev/null 2>&1 || true
 pm2 delete "$WEB_NAME" >/dev/null 2>&1 || true
 
-# (Opcional) defina PORT/NODE_ENV no comando pra garantir porta/ambiente
+# defina PORT/NODE_ENV no comando pra garantir porta/ambiente
 pm2 start bash --name "$API_NAME" -- -lc "cd '$API_CWD' && PORT=$API_PORT NODE_ENV=production $BACK_START_CMD"
 pm2 start bash --name "$WEB_NAME" -- -lc "cd '$WEB_CWD' && PORT=$WEB_PORT NODE_ENV=production $FRONT_START_CMD"
 
