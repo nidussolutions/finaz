@@ -122,12 +122,8 @@ fi
 log "Building backend"
 pkg_build "$BACKEND_PKG_MGR"
 
-# Determine start script (prefer 'start:prod' then 'start')
+# Determine start script 
 BACK_START_SCRIPT="start"
-if jq -r '.scripts["start"] // empty' package.json >/dev/null 2>&1; then
-  BACK_START_SCRIPT="start"
-fi
-
 BACK_START_CMD=$(pkg_start_cmd "$BACKEND_PKG_MGR" "$BACK_START_SCRIPT")
 popd >/dev/null
 
@@ -157,18 +153,17 @@ WEB_CWD="$(cd "$FRONTEND_DIR" && pwd)"
 API_PORT="${FINAZ_API_PORT:-4000}"
 WEB_PORT="${FINAZ_WEB_PORT:-3000}"
 
-log "Configuring PM2 processes"
-# Create/Update ecosystem inline (without writing file)
-pm2 describe "$API_NAME" >/dev/null 2>&1 || pm2 start bash --name "$API_NAME" -- -lc "cd '$API_CWD' && $BACK_START_CMD"
-pm2 describe "$WEB_NAME" >/dev/null 2>&1 || pm2 start bash --name "$WEB_NAME" -- -lc "cd '$WEB_CWD' && $FRONT_START_CMD"
+log "Configuring PM2 processes (recreate)"
 
-# Reload to apply latest build
-pm2 reload "$API_NAME" || pm2 restart "$API_NAME"
-pm2 reload "$WEB_NAME" || pm2 restart "$WEB_NAME"
+# Remove se existir (evita manter comando antigo)
+pm2 delete "$API_NAME" >/dev/null 2>&1 || true
+pm2 delete "$WEB_NAME" >/dev/null 2>&1 || true
 
-# Save for startup
+# (Opcional) defina PORT/NODE_ENV no comando pra garantir porta/ambiente
+pm2 start bash --name "$API_NAME" -- -lc "cd '$API_CWD' && PORT=$API_PORT NODE_ENV=production $BACK_START_CMD"
+pm2 start bash --name "$WEB_NAME" -- -lc "cd '$WEB_CWD' && PORT=$WEB_PORT NODE_ENV=production $FRONT_START_CMD"
+
 pm2 save
-# Enable PM2 resurrect on boot
 pm2 startup systemd -u "$USER" --hp "$HOME" | tail -n 1 | bash || true
 
 log "Deployment finished successfully ✅"
