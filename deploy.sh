@@ -88,7 +88,7 @@ if $DO_GIT_PULL; then
   git checkout "$BRANCH"
   git pull --ff-only origin "$BRANCH"
 else
-  warn "Skipping git pull (--no-pull)"
+  log "Skipping git pull"
 fi
 
 # ---- resolve project structure ----
