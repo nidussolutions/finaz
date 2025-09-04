@@ -124,8 +124,8 @@ pkg_build "$BACKEND_PKG_MGR"
 
 # Determine start script (prefer 'start:prod' then 'start')
 BACK_START_SCRIPT="start"
-if jq -r '.scripts["start:prod"] // empty' package.json >/dev/null 2>&1; then
-  BACK_START_SCRIPT="start:prod"
+if jq -r '.scripts["start"] // empty' package.json >/dev/null 2>&1; then
+  BACK_START_SCRIPT="start"
 fi
 
 BACK_START_CMD=$(pkg_start_cmd "$BACKEND_PKG_MGR" "$BACK_START_SCRIPT")
