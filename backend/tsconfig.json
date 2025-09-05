@@ -11,8 +11,12 @@
     "types": ["node"],
     "sourceMap": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@dto/*": ["./src/domain/dto/*"]
+    }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/database/knexfile.ts"],
   "exclude": ["node_modules", "dist"]
 }

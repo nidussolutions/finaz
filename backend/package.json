@@ -2,27 +2,35 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "type": "commonjs",
   "main": "app.ts",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only --require tsconfig-paths/register src/app.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "cross-env NODE_ENV=production node -r tsconfig-paths/register dist/server.js",
+    "make:migration": "cross-env NODE_ENV=development knex --knexfile src/database/knexfile.ts migrate:make",
+    "migrate:latest": "cross-env NODE_ENV=development knex --knexfile src/database/knexfile.ts migrate:latest",
+    "migrate:rollback": "cross-env NODE_ENV=development knex --knexfile src/database/knexfile.ts migrate:rollback"
   },
   "keywords": [],
   "author": "João Gustavo Soares Bispo",
   "license": "ISC",
   "packageManager": "pnpm@10.15.1",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.3.1",
+    "cross-env": "^10.0.0",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   }
 }
