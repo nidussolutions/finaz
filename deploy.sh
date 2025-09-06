@@ -101,18 +101,6 @@ pushd "$BACKEND_DIR" >/dev/null
 BACKEND_PKG_MGR=$(detect_pkg_mgr)
 pkg_install "$BACKEND_PKG_MGR"
 
-# Prisma generate & migrate (deploy safe for prod)
-if [[ -d "prisma" ]]; then
-  if [[ ! -f ".env" ]]; then
-    warn "apps/api/.env missing. Ensure DATABASE_URL and JWT_SECRET are configured."
-  fi
-  npx prisma generate || true
-  npx prisma migrate deploy || true
-fi
-
-log "Building backend"
-pkg_build "$BACKEND_PKG_MGR"
-
 # Determine start script 
 BACK_START_SCRIPT="start"
 BACK_START_CMD=$(pkg_start_cmd "$BACKEND_PKG_MGR" "$BACK_START_SCRIPT")
