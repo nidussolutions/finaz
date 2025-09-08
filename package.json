@@ -1,6 +1,7 @@
 {
   "name": "finaz",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "scripts": {
     "bdev": "cd backend && pnpm run dev",
